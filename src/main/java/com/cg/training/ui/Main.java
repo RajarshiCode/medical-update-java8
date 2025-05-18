@@ -8,14 +8,19 @@ import com.cg.training.models.Patient;
 import com.cg.training.service.AppointmentSystem;
 
 /**
+ * This is the main user interface class for the Medical Appointment System.
+ * It allows the user to act as either a Doctor or a Patient and perform
+ * different operations such as registration, booking appointments, and managing them.
  * 
- * 
- * 
- * 
- * 
- * */
+ * Author: Rishiraj Ray and Pritha Saha
+ */
 public class Main
-{
+{	 /**
+     * The main method is the entry point of the application.
+     * It uses a simple text-based menu to interact with the user.
+     * 
+     * @param args command-line arguments (not used)
+     */
 	public static void main(String[] args)  {
         AppointmentSystem system = new AppointmentSystem();
         Scanner sc = new Scanner(System.in);
@@ -98,7 +103,7 @@ public class Main
                                 
                                 
                             case "2":{
-                            	System.out.println("All Doctors");
+                            	
                             	system.showAllDoctors();
                             	break;
                             }

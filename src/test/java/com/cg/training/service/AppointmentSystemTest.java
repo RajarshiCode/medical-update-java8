@@ -14,27 +14,46 @@ import org.junit.Test;
 import com.cg.training.models.Appointment;
 import com.cg.training.models.Patient;
 
+/**
+ * This class contains unit tests for the AppointmentSystem service class.
+ * It tests patient and doctor registration, appointment booking, 
+ * appointment completion, and file saving features.
+ * 
+ * @author Rittika Dutta
+ */
 public class AppointmentSystemTest {
 
-	private AppointmentSystem system;
+    private AppointmentSystem system;
 
+    /**
+     * Sets up a new AppointmentSystem object before each test.
+     */
     @Before
     public void setUp() {
         system = new AppointmentSystem();
     }
 
+    /**
+     * Tests if a patient is successfully registered and retrievable by ID.
+     */
     @Test
     public void testRegisterPatient() {
         system.registerPatient("Lakshmi");
         assertNotNull(system.findPatientById("P1000"));
     }
 
+    /**
+     * Tests if an invalid patient name is rejected and not stored.
+     */
     @Test
     public void testInvalidPatientName() {
         system.registerPatient("1234");
         assertNull(system.findPatientById("P1000"));
     }
 
+    /**
+     * Tests if a doctor is successfully registered.
+     */
     @Test
     public void testRegisterDoctor() {
         system.registerDoctor("Ramesh");
@@ -42,6 +61,9 @@ public class AppointmentSystemTest {
         assertEquals("Ramesh", system.doctors.get(0).getName());
     }
 
+    /**
+     * Tests successful appointment booking when a doctor is available.
+     */
     @Test
     public void testBookAppointmentSuccess() {
         system.registerPatient("Meera");
@@ -54,6 +76,9 @@ public class AppointmentSystemTest {
         assertEquals("Scheduled", appt.getStatus());
     }
 
+    /**
+     * Tests that appointment booking fails when no doctor is available.
+     */
     @Test
     public void testBookAppointmentFailure_NoDoctor() {
         system.registerPatient("Geeta");
@@ -62,6 +87,9 @@ public class AppointmentSystemTest {
         assertNull(appt);
     }
 
+    /**
+     * Tests completing an appointment changes the status properly.
+     */
     @Test
     public void testCompleteAppointment() {
         system.registerPatient("Amit");
@@ -75,11 +103,17 @@ public class AppointmentSystemTest {
         assertEquals("Completed", appt.getStatus());
     }
 
+    /**
+     * Tests that completing an appointment with an invalid index is handled gracefully.
+     */
     @Test
     public void testCompleteAppointmentInvalidIndex() {
         system.completeAppointment(10); // should not crash
     }
 
+    /**
+     * Tests that re-completing an already completed appointment is handled.
+     */
     @Test
     public void testReCompleteAppointmentThrows() {
         system.registerPatient("Divya");
@@ -93,12 +127,18 @@ public class AppointmentSystemTest {
         assertEquals("Completed", appt.getStatus());
     }
 
+    /**
+     * Tests that doctors are displayed correctly.
+     */
     @Test
     public void testShowAllDoctors() {
         system.registerDoctor("Hari");
         system.showAllDoctors();
     }
 
+    /**
+     * Tests that all appointments are shown correctly.
+     */
     @Test
     public void testShowAllAppointments() {
         system.registerPatient("Neha");
@@ -107,6 +147,9 @@ public class AppointmentSystemTest {
         system.showAllAppointments();
     }
 
+    /**
+     * Tests filtering appointments by doctor ID.
+     */
     @Test
     public void testShowAppointmentsByDoctorId() {
         system.registerPatient("Dev");
@@ -117,6 +160,9 @@ public class AppointmentSystemTest {
         system.showAppointmentsByDoctorId("INVALID_ID");
     }
 
+    /**
+     * Tests filtering appointments by patient ID.
+     */
     @Test
     public void testShowAppointmentsByPatientId() {
         system.registerPatient("Seema");
@@ -126,12 +172,18 @@ public class AppointmentSystemTest {
         system.showAppointmentsByPatientId("INVALID_ID");
     }
 
+    /**
+     * Tests that searching for a non-existent patient returns null.
+     */
     @Test
     public void testFindPatientByIdNotFound() {
         Patient p = system.findPatientById("P9999");
         assertNull(p);
     }
 
+    /**
+     * Tests saving appointment details to a CSV file.
+     */
     @Test
     public void testSaveAppointmentsToFile() throws Exception {
         system.registerPatient("Manoj");
@@ -145,6 +197,9 @@ public class AppointmentSystemTest {
         assertTrue(Files.readString(Paths.get(file.getPath())).contains("Manoj"));
     }
 
+    /**
+     * Tests that saving to an invalid path is handled without crashing.
+     */
     @Test
     public void testSaveAppointmentsToInvalidPath() {
         try {
